@@ -16,13 +16,17 @@
   .form-item{
     display: flex;
     align-items: center;
-    padding: 30px 0 40px;
+    height: 120px;
     img{
       width: 48px;
+      margin-right: 20px;
     }
     label {
       display: inline-block;
       width: 160px;
+      white-space: nowrap;
+      margin-right: 20px;
+      font-size: 30px;
     }
 
     .item-content{
@@ -42,16 +46,15 @@
       &.error_item .error{
         display: block;
       }
-
       input, .input-text{
         flex: 1;
-        margin: 0 20px;
+        font-size: 30px;
       }
-      .input-text {
+      .input-text{
         color: #999;
-        font-size: 28px;
-        flex: 1;
-        margin: 0 20px;
+        &.black{
+          color: #333;
+        }
       }
       button.check-code {
         color: #FF4401;
@@ -62,7 +65,10 @@
         border-left: 4px solid #DCDCDC;
         width: 180px;
         text-align: right;
-        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        right: 0;
+
         &:disabled{
           color: rgba(0, 0, 0, 0.3);
           background-color: #F7F7F7;
@@ -81,6 +87,18 @@
         height: 40px;
         z-index: 9;
         opacity: 0;
+      }
+      .warn-text{
+        position: absolute;
+        left: 0;
+        top: 100%;
+        font-size: 24px;
+        color: #999;
+        white-space: nowrap; 
+        span{
+          color: #FF4401;
+          margin-right: 10px;
+        }
       }
     }
   }
@@ -240,6 +258,37 @@ table{
 // .checkbox-small{
 //   @include checkbox-div(30px);
 // }
+
+.upload-img-box{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  position: relative;
+
+  .icon-img{
+    width: 94px;
+    margin-bottom: 6px;
+  }
+  .upload-img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    // transform: translateY(-50%);
+    z-index: 9;
+  }
+
+  .delete-icon{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 6px;
+    background: #000;
+    color: #fff;
+    z-index: 99;
+  }
+}
 
 
 

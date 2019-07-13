@@ -226,7 +226,6 @@ function checkIdCard(ruleValue, vaForm) {
 }
 
 
-
 /**
  * 设置错误的方法
  * @param {*} dom 当前dom元素

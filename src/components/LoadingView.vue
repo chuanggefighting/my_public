@@ -1,19 +1,19 @@
 
 <template>
-    <div class="loading-container" >
+    <div class="loading-container" v-if="LOADING.status > 0" >
         <!-- 遮罩层下方内容禁止滑动 @touchmove.prevent -->
-        <div class="mask" :class="{ 'darkBg': status > 1}" @touchmove.prevent></div>
-        <template v-if="status === 1">
+        <div class="mask" :class="{ 'darkBg': LOADING.status > 1}" @touchmove.prevent></div>
+        <template v-if="LOADING.status === 1">
             <div class="loading-box content">
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHBhdGggZmlsbD0ibm9uZSIgZD0iTTAgMGgxMDB2MTAwSDB6Ii8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjRTlFOUU5IiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTMwKSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iIzk4OTY5NyIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSgzMCAxMDUuOTggNjUpIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjOUI5OTlBIiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0icm90YXRlKDYwIDc1Ljk4IDY1KSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iI0EzQTFBMiIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSg5MCA2NSA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNBQkE5QUEiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoMTIwIDU4LjY2IDY1KSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iI0IyQjJCMiIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSgxNTAgNTQuMDIgNjUpIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjQkFCOEI5IiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0icm90YXRlKDE4MCA1MCA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNDMkMwQzEiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1MCA0NS45OCA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNDQkNCQ0IiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTEyMCA0MS4zNCA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNEMkQyRDIiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDM1IDY1KSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iI0RBREFEQSIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSgtNjAgMjQuMDIgNjUpIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjRTJFMkUyIiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0icm90YXRlKC0zMCAtNS45OCA2NSkiLz48L3N2Zz4=" alt="">
-                <!-- <p>{{loadingText}}</p> -->
+                <!-- <p>{{loadText}}</p> -->
             </div>
         </template>
-        <template v-if="status === 2">
+        <template v-if="LOADING.status === 2">
             <div class="error-box content">
-                <div class="main" v-if="errorMsg">
+                <div class="main" v-if="LOADING.msg">
                     <img src="../assets/images/loading/error-other.png" alt="">
-                    <p v-text="errorMsg"></p>
+                    <p v-text="LOADING.msg"></p>
                     <button @click="closeDialog">关闭</button>
                 </div>
                 <div class="main" v-else>
@@ -27,32 +27,25 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
-    name: "loadingView",
-    data(){
-        return {
-            errorText: "亲！请检查网络配置"
-        }
-    },
-    props: {
-        loadingText: {
-            type: String,
-            default: "正在加载中"
-        },
-        status: {
-            type: String,
-            default: 0
-        },
-        errorMsg: {
-            type: String,
-            default: ""
-        }
+  name: "loadingView",
+  data(){
+    return {
+      loadText: "正在加载中",
+      errorText: "亲！请检查网络配置"
+    }
+  },
+  computed:{
+    ...mapState([
+      'LOADING'
+    ])
     },
     methods: {
-        closeDialog(){
-            this.$store.commit('hideLoad')
-        }
-    }
+      closeDialog(){
+        this.$store.commit('hideLoad')
+      }
+  }
 }
 </script>
  
