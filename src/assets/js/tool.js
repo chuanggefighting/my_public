@@ -390,47 +390,54 @@ function randomString (len) {
   return pwd
 }
 
+// 图片读取：file 转 baseUrl
+function fileReader (file) {
+	let reader = new FileReader()
+	reader.readAsDataURL(file)
+	return new Promise(resolve => reader.onloadend = () => { 
+		resolve(reader.result) 
+	})
+}
 
-// 图片压缩：根据 file.size 字节数判断是否需要压缩：1MB = 1024KB，1KB = 1024字节
-function compressImg (base64, w, callback, min, max) {
-	var newImage = new Image()
-	var quality = 0.6 // 压缩系数0-1之间
-	newImage.src = base64
-	newImage.setAttribute('crossOrigin', 'Anonymous')	// url为外域时需要
-	var imgWidth, imgHeight
-	newImage.onload = function () {
-		imgWidth = this.width
-		imgHeight = this.height
-		var canvas = document.createElement('canvas')
-		var ctx = canvas.getContext('2d')
-		if (Math.max(imgWidth, imgHeight) > w) {
-			if (imgWidth > imgHeight) {
-				canvas.width = w
-				canvas.height = w * imgHeight / imgWidth
-			} else {
-				canvas.height = w
-				canvas.width = w * imgWidth / imgHeight
-			}
-		} else {
-			canvas.width = imgWidth
-			canvas.height = imgHeight
-			quality = 0.6
-		}
-		ctx.clearRect(0, 0, canvas.width, canvas.height)
-		ctx.drawImage(this, 0, 0, canvas.width, canvas.height)
-		var base64 = canvas.toDataURL('image/jpeg', quality) // 压缩语句
-		// 如想确保图片压缩到自己想要的尺寸,如要求在 min-max kb之间，请加以下语句，quality初始值根据情况自定
-		while (base64.length / 1024 > max) {
-			quality -= 0.01
-			base64 = canvas.toDataURL('image/jpeg', quality)
-		}
-		// 防止最后一次压缩低于最低尺寸，只要quality递减合理，无需考虑
-		while (base64.length / 1024 < min) {
-			quality += 0.001
-			base64 = canvas.toDataURL('image/jpeg', quality)
-		}
-		callback(base64)// 必须通过回调函数返回，否则无法及时拿到该值
+/**
+ * @method compress   图片压缩
+ * @param baseUrl     图片路径
+ * @param scale       缩放比例
+ * @param quality     图片质量
+ * 
+**/
+function compress(baseUrl, file, maxSize = 1, scale = 1, quality = 0.9) {
+	// file.size 获取字节数：1MB = 1024KB，1KB = 1024字节
+	if (file.size < maxSize * 1024 * 1024) {
+			return baseUrl;
 	}
+	let img = new Image();
+	img.src = baseUrl;
+	img.setAttribute("crossOrigin", "Anonymous"); // url为外域时需要
+	return new Promise(resolve => 
+			(img.onload = () => {
+				let canvas = document.createElement("canvas"),
+					ctx = canvas.getContext("2d"),
+					w = img.width * scale,
+					h = img.height * scale;
+				canvas.width = w;
+				canvas.height = h;
+				ctx.drawImage(img, 0, 0, w, h);
+				let baseImg = canvas.toDataURL("image/jpeg", quality)
+				let file = this.dataURLtoFile(baseImg)
+				resolve(file);
+			})
+	)
+}
+
+// base64 转 file
+function dataURLtoFile(dataurl, filename){
+	let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+			bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+	while(n--){
+			u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new File([u8arr], filename, {type: mime});
 }
  
 // 页面滚动
@@ -608,4 +615,44 @@ Array.prototype.binarySearch = function(item) {
 	}
 	return -1
 }
+
+// 延时执行
+function debounce(callback, delay) {
+  let timer = 0;
+  return function () {
+    clearTimeout(timer);
+    timer = setTimeout(() => { callback.apply(this, arguments); }, delay);
+  }
+}
+
+// 节流
+function throttle(callback, duration = 200) {
+  let timer = 0;
+  return function () {
+    if (timer === 0) {
+      timer = setTimeout(() => { timer = 0; }, duration);
+      callback.apply(this, arguments)
+    }
+  }
+}
+
+function setCookie(key, value, expireTime) {
+  var cookie = key + '=' + encodeURIComponent(value);
+  if (typeof expireTime !== 'undefined') {
+    var expire = new Date();
+    expire.setTime(expire.getTime() + expireTime);
+    cookie += ';expires=' + expire.toUTCString();
+  }
+  document.cookie = cookie + ';domain=' + location.hostname + ';path=/';
+}
+
+function getCookie(key) {
+  var cookie = document.cookie.replace(/;\s*/g, ';');
+  cookie = parseParam(cookie, ';');
+  return cookie[key];
+}
+
+
+
+
 
